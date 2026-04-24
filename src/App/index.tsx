@@ -1,4 +1,5 @@
 import React from "react";
+// @ts-ignore
 import "./styles.css";
 import { Tile } from "../Tile";
 import { TileData } from "../data";
