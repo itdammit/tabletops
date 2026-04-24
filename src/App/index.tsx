@@ -3,6 +3,7 @@ import React from "react";
 import "./styles.css";
 import { Tile } from "../Tile";
 import { TileData } from "../data";
+import headerImg from "../images/header.jpg";
 
 export const App: React.FC = () => {
   return (
@@ -11,7 +12,7 @@ export const App: React.FC = () => {
         <div className="header">
           <h1>Столешницы с закругленной кромкой</h1>
 
-          <img src={"src/images/header.jpg"} className="imageheader" />
+          <img src={headerImg} className="imageheader" />
 
           <h4>
             Основа столешниц с закругленной кромкой (постформинг) –
