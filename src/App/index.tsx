@@ -10,11 +10,11 @@ export const App: React.FC = () => {
     <main>
       <div className="pageWrapper">
         <div className="header">
-          <h1>Столешницы с закругленной кромкой</h1>
+          <h1 className="headerText">Столешницы с закругленной кромкой</h1>
 
-          <img src={headerImg} className="imageheader" />
+          <img src={headerImg} className="headerImage" />
 
-          <h4>
+          <h4 className="text">
             Основа столешниц с закругленной кромкой (постформинг) –
             древесностружечная плита, покрытая декоративным пластиком HPL
             (ламинат высокого давления) и укрепленная на внешней стороне
@@ -26,9 +26,8 @@ export const App: React.FC = () => {
             закругления 3,3
           </h4>
 
-          <h3>
-            Str. Mihail Kogalniceanu Nr.59, Alba county, Romania, 515800, Sebes
-            email sales.sebes@kronospan.ro phoneT +40 258 80 11 00
+          <h3 className="text">
+            г. Челябиинск, Копейское шоссе 17а Номер телефона +8(995)4663606
           </h3>
         </div>
 
