@@ -7,6 +7,8 @@ on:
 jobs:
   pages:
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     permissions:
       contents: read
       pages: write
@@ -14,6 +16,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Use Node.js
         uses: actions/setup-node@v4
@@ -41,9 +45,8 @@ jobs:
           ls -la dist || true
 
       - name: Deploy to gh-pages branch (push dist)
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          publish_dir: ./dist
-          publish_branch: gh-pages
-          # use the repository token to push the branch
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+        # configure git user to avoid push failure
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          npx -y gh-pages -d dist -b gh-pages
