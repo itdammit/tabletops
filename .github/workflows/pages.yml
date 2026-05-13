@@ -68,6 +68,8 @@ jobs:
           rm -rf docs || true
           mkdir -p docs
           cp -r dist/* docs/
+          # Prevent GitHub Pages from running Jekyll (serve static files as-is)
+          touch docs/.nojekyll
           git add docs
           # Commit as the actions bot; skip creating a new run via the job-level if guard
           if git diff --staged --quiet; then
