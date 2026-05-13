@@ -5,7 +5,7 @@ on:
     branches: [main]
 
 jobs:
-  build:
+  pages:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -44,22 +44,9 @@ jobs:
         uses: actions/configure-pages@v3
 
       - name: Upload artifact for Pages
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-pages-artifact@v1
         with:
           path: ./dist
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
-    steps:
-      - name: "Debug: print run info in deploy job"
-        run: |
-          echo "(deploy) GITHUB_RUN_ID=$GITHUB_RUN_ID"
-          echo "(deploy) GITHUB_RUN_NUMBER=$GITHUB_RUN_NUMBER"
-          echo "(deploy) GITHUB_WORKFLOW=$GITHUB_WORKFLOW"
-          echo "(deploy) Listing current workspace:"; ls -la || true
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v1
