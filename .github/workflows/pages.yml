@@ -49,11 +49,19 @@ jobs:
       - name: Deploy to main/docs (commit built site to main)
         env:
           REPO: ${{ github.repository }}
-          # Prefer a user-provided PAT (secrets.DEPLOY_TOKEN) if set, otherwise fall back to GITHUB_TOKEN
-          TOKEN: ${{ secrets.DEPLOY_TOKEN != '' && secrets.DEPLOY_TOKEN || secrets.GITHUB_TOKEN }}
+          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          set -e
+          set -euo pipefail
           echo "Deploying built site to main:docs"
+          # Choose token in shell so we can debug which is used
+          TOKEN="$DEPLOY_TOKEN"
+          if [ -z "$TOKEN" ]; then
+            TOKEN="$GITHUB_TOKEN"
+            echo "Using GITHUB_TOKEN for push"
+          else
+            echo "Using DEPLOY_TOKEN (PAT) for push"
+          fi
           # Ensure we have the repo checked out with credentials
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -67,5 +75,6 @@ jobs:
           else
             git commit -m "Update docs (Pages) from build ${GITHUB_SHA}"
             # Push the changes back to the main branch
+            echo "Pushing to https://github.com/${REPO}.git"
             git push "https://x-access-token:${TOKEN}@github.com/${REPO}.git" HEAD:main
           fi
