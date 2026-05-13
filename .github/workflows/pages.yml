@@ -32,7 +32,7 @@ jobs:
       - name: Build
         run: npm run build
 
-  - name: "Debug: print run info and dist files"
+      - name: "Debug: print run info and dist files"
         run: |
           echo "GITHUB_RUN_ID=$GITHUB_RUN_ID"
           echo "GITHUB_RUN_NUMBER=$GITHUB_RUN_NUMBER"
@@ -55,7 +55,7 @@ jobs:
       pages: write
       id-token: write
     steps:
-  - name: "Debug: print run info in deploy job"
+      - name: "Debug: print run info in deploy job"
         run: |
           echo "(deploy) GITHUB_RUN_ID=$GITHUB_RUN_ID"
           echo "(deploy) GITHUB_RUN_NUMBER=$GITHUB_RUN_NUMBER"
