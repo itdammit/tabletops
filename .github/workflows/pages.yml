@@ -32,6 +32,14 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Debug: print run info and dist files
+        run: |
+          echo "GITHUB_RUN_ID=$GITHUB_RUN_ID"
+          echo "GITHUB_RUN_NUMBER=$GITHUB_RUN_NUMBER"
+          echo "GITHUB_WORKFLOW=$GITHUB_WORKFLOW"
+          echo "Listing dist contents:";
+          ls -la dist || true
+
       - name: Configure Pages
         uses: actions/configure-pages@v3
 
@@ -47,5 +55,11 @@ jobs:
       pages: write
       id-token: write
     steps:
+      - name: Debug: print run info in deploy job
+        run: |
+          echo "(deploy) GITHUB_RUN_ID=$GITHUB_RUN_ID"
+          echo "(deploy) GITHUB_RUN_NUMBER=$GITHUB_RUN_NUMBER"
+          echo "(deploy) GITHUB_WORKFLOW=$GITHUB_WORKFLOW"
+          echo "(deploy) Listing current workspace:"; ls -la || true
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v1
