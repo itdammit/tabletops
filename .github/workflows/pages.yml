@@ -9,6 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+    # don't re-run this workflow when the commit is made by the actions bot
+    if: github.actor != 'github-actions[bot]'
     permissions:
       contents: read
       pages: write
@@ -44,23 +46,25 @@ jobs:
           echo "Listing dist contents:";
           ls -la dist || true
 
-      - name: Deploy to gh-pages branch (force push dist)
+      - name: Deploy to main/docs (commit built site to main)
         env:
           REPO: ${{ github.repository }}
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -e
-          echo "Deploying to gh-pages branch"
-          cd dist
-          git init
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add --all
-          git commit -m "Deploy to gh-pages: ${GITHUB_SHA}" || echo "No changes to commit"
-          # Only push if there is a commit (HEAD exists)
-          if git rev-parse --verify HEAD >/dev/null 2>&1; then
-            echo "Pushing to gh-pages"
-            git push --force "https://x-access-token:${TOKEN}@github.com/${REPO}.git" HEAD:gh-pages
+          echo "Deploying built site to main:docs"
+          # Ensure we have the repo checked out with credentials
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          rm -rf docs || true
+          mkdir -p docs
+          cp -r dist/* docs/
+          git add docs
+          # Commit as the actions bot; skip creating a new run via the job-level if guard
+          if git diff --staged --quiet; then
+            echo "No changes to docs - skipping commit"
           else
-            echo "No changes to deploy - skipping push"
+            git commit -m "Update docs (Pages) from build ${GITHUB_SHA}"
+            # Push the changes back to the main branch
+            git push "https://x-access-token:${TOKEN}@github.com/${REPO}.git" HEAD:main
           fi
